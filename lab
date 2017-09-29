@@ -37,19 +37,42 @@ def main():
     pygame.init()
     W, H = 800, 600
     screen = pygame.display.set_mode((W, H))
-    width, height = 500, 400
-    rect = pygame.Rect((W - width)/2, (H - height)/2, width, height)
+
+    width, height = 500, 500
+    # Coordinates of upper left corner of the labyrinth.
+    P = ((W - width)/2, (H - height)/2)
+    rect = pygame.Rect(P[0], P[1], width, height)
+
+    lab = (
+        'w  ww ',
+        'ww w  ',
+        'w  w w',
+        '  ww w',
+        'w  w w',
+        'w ww w'
+    )
+    assert len(set(map(len, lab))) == 1
+    assert len(lab[0]) == len(lab)
+    w = width / len(lab[0])  # cell width
+    h = height / len(lab)  # cell height
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-        screen.fill((127, 127, 127))
-        pygame.draw.rect(screen, (26, 161, 216), rect)
+        screen.fill((255, 255, 255))
+        pygame.draw.rect(screen, (0, 0, 0), rect)
+        for row, r in enumerate(lab):
+            for col, c in enumerate(r):
+                if c == 'w':  # wall
+                    pygame.draw.rect(
+                        screen, (127, 127, 127),
+                        pygame.Rect(P[0] + col * w, P[1] + row * h, w, h))
+
         pygame.display.flip()
         sleep(0.1)
 
 
 if __name__ == '__main__':
-    dragonborn()
+    main()
